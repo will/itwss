@@ -17,6 +17,8 @@ twss classification gem by <a href="https://github.com/bvandenbos/twss">bvandenb
 <script src="underscore-min.js"></script>
 <script>$(function(){
 
+$("input").focus();
+
 var fadeAndSay = function(msg) {
   $('.answer').fadeOut('fast', function() { $(this).text(msg).fadeIn('fast')})
 }
