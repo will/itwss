@@ -2,9 +2,34 @@
 <html>
   <head>
     <title>itwss?</title>
-    <link rel='stylesheet' href='style.css' />
     <link href='http://fonts.googleapis.com/css?family=Bevan' rel='stylesheet' type='text/css'>
+    <style>
+      body {
+       padding: 2em;
+       background: cadetblue;
+       font-family: "Bevan", Helvetica, ariel, sans-serif;
+      }
+
+      h1 {
+        display: inline;
+        text-shadow: aaa 0px 1px 0px;
+      }
+
+      .answer { padding-left: 0.2em; }
+
+      input {
+        font-size: 2em;
+        font-family: "Bevan";
+        background-color: salmon;
+        border: 0px;
+        padding: 0.2em;
+        width: 100%;
+      }
+
+      footer, a { color: darkslategray; }
+    </style>
   </head>
+
 <body>
 <h1>Is that what she said?</h1>
 <h1 class='answer'></h1>
@@ -20,24 +45,21 @@ twss classification gem by <a href="https://github.com/bvandenbos/twss">bvandenb
 $("input").focus();
 
 var fadeAndSay = function(msg) {
-  $('.answer').fadeOut('fast', function() { $(this).text(msg).fadeIn('fast')})
-}
-var didSheSayThat = function() {
-  var sheMightHaveSaid = $("input").val()
-  if( sheMightHaveSaid == '') {
-    fadeAndSay('')
-    return
-  }
-  $.post("/", {"q": sheMightHaveSaid}, function(response){
-    if( response.sheSaidIt ) {
-      fadeAndSay('yes!')
-    } else {
-      fadeAndSay('no')
-    }
-  })
-}
+  $('.answer').fadeOut('fast', function() { $(this).text(msg).fadeIn('fast')})}
 
-$("input").keyup(_.debounce(didSheSayThat, 600));
+$("input").keyup(
+  _.debounce(
+      function() { window.location.hash = "#?/" + encodeURI($("input").val()) }
+      , 600));
+
+window.onpopstate = function() {
+  var input = decodeURI(window.location.hash.slice(3))
+  if( input === ''     ) { fadeAndSay(''); return }
+  $("input").val(input)
+  $.post(
+      "/"
+    , {"q": input}
+    , function(response){ fadeAndSay(response.sheSaidIt ? "yes" : "no") }) }
 
 });</script>
 </body>
