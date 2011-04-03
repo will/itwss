@@ -3,6 +3,8 @@ require 'sinatra'
 require 'json'
 require 'twss'
 
+TWSS.treshold = 2.0
+
 get '/' do
   erb :index
 end
