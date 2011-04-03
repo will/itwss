@@ -49,18 +49,24 @@ var fadeAndSay = function(msg) {
 
 $("input").keyup(
   _.debounce(
-      function() { window.location.hash = "#?/" + encodeURI($("input").val()) }
+      function() {
+        window.location.hash = "#?/" + encodeURI($("input").val())
+        didSheSayIt() }
       , 600));
 
-window.onpopstate = function() {
+var didSheSayIt = _.debounce(function() {
   var input = decodeURI(window.location.hash.slice(3))
   if( input === ''     ) { fadeAndSay(''); return }
+  console.log(input)
   $("input").val(input)
   $.post(
       "/"
     , {"q": input}
-    , function(response){ fadeAndSay(response.sheSaidIt ? "yes" : "no") }) }
+    , function(response){ fadeAndSay(response.sheSaidIt ? "yes" : "no") })
+, 100})
 
+window.onpopstate = didSheSayIt
+didSheSayIt()
 });</script>
 </body>
 </html>
