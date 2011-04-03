@@ -62,7 +62,7 @@ var didSheSayIt = _.debounce(function() {
   $.post(
       "/"
     , {"q": input}
-    , function(response){ fadeAndSay(response.sheSaidIt ? "yes" : "no") })
+    , function(response){ fadeAndSay(response.sheSaidIt ? "yes!" : "no") })
 , 100})
 
 window.onpopstate = didSheSayIt
