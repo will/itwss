@@ -1,0 +1,42 @@
+<!html>
+<html>
+  <head>
+    <title>itwss?</title>
+    <link rel='stylesheet' href='style.css' />
+    <link href='http://fonts.googleapis.com/css?family=Bevan' rel='stylesheet' type='text/css'>
+  </head>
+<body>
+<h1>Is that what she said?</h1>
+<h1 class='answer'></h1>
+<input name="itwss">
+<footer>
+sinatra app by <a href="http://bitfission.com">will</a>,
+twss classification gem by <a href="https://github.com/bvandenbos/twss">bvandenbos</a>
+</footer>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+<script src="underscore-min.js"></script>
+<script>$(function(){
+
+var fadeAndSay = function(msg) {
+  $('.answer').fadeOut('fast', function() { $(this).text(msg).fadeIn('fast')})
+}
+var didSheSayThat = function() {
+  var sheMightHaveSaid = $("input").val()
+  if( sheMightHaveSaid == '') {
+    fadeAndSay('')
+    return
+  }
+  $.post("/", {"q": sheMightHaveSaid}, function(response){
+    if( response.sheSaidIt ) {
+      fadeAndSay('yes!')
+    } else {
+      fadeAndSay('no')
+    }
+  })
+}
+
+$("input").keyup(_.debounce(didSheSayThat, 600));
+
+});</script>
+</body>
+</html>
