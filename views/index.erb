@@ -42,31 +42,21 @@ twss classification gem by <a href="https://github.com/bvandenbos/twss">bvandenb
 <script src="underscore-min.js"></script>
 <script>$(function(){
 
-$("input").focus();
-
 var fadeAndSay = function(msg) {
   $('.answer').fadeOut('fast', function() { $(this).text(msg).fadeIn('fast')})}
 
-$("input").keyup(
-  _.debounce(
-      function() {
-        window.location.hash = "#?/" + encodeURI($("input").val())
-        didSheSayIt() }
-      , 600));
+var didSheSay = function(input) {
+  if(input === '') { fadeAndSay(''); return }
+  window.location.hash = "#?/" + encodeURI(input)
+  $.post("/", {"q": input}, function(r){fadeAndSay(r.sheSaidIt ? "yes!" : "no")})}
 
-var didSheSayIt = _.debounce(function() {
-  var input = decodeURI(window.location.hash.slice(3))
-  if( input === ''     ) { fadeAndSay(''); return }
-  console.log(input)
-  $("input").val(input)
-  $.post(
-      "/"
-    , {"q": input}
-    , function(response){ fadeAndSay(response.sheSaidIt ? "yes!" : "no") })
-, 100})
+var initial = decodeURI(window.location.hash.slice(3))
+didSheSay(initial)
+$("input").
+  val(initial).
+  focus().
+  keyup(_.debounce(function(){ didSheSay($(this).val()) } , 600))
 
-window.onpopstate = didSheSayIt
-didSheSayIt()
 });</script>
 </body>
 </html>
