@@ -46,8 +46,8 @@ var fadeAndSay = function(msg) {
   $('.answer').fadeOut('fast', function() { $(this).text(msg).fadeIn('fast')})}
 
 var didSheSay = function(input) {
-  if(input === '') { fadeAndSay(''); return }
   window.location.hash = "#?/" + encodeURI(input)
+  if(input === '') { fadeAndSay(''); return }
   $.post("/", {"q": input}, function(r){fadeAndSay(r.sheSaidIt ? "yes!" : "no")})}
 
 var initial = decodeURI(window.location.hash.slice(3))
